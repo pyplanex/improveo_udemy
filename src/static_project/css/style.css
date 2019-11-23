@@ -1,0 +1,9 @@
+.pt-big {
+    padding-top: 80px;
+}
+
+.img-avatar {
+    height:35px;
+    width:35px;
+    border-radius: 50%;
+}

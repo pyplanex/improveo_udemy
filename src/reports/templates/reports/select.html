@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}select a day{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+$(function(){
+    $(".datepicker").datepicker({'dateFormat': 'yy-mm-dd'}).val()
+});
+</script>
+ 
+<div class="col-6 mx-auto">
+    <div class="text-white text-center h3 m-5">Select a line and a day </div>
+    <form action="" method="POST" class="form-control" autocomplete="off">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+
+
+{% endblock content %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} post details{% endblock title %}
+
+{% block content %}
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg .tg-ve35{border-color:#c0c0c0;text-align:left;vertical-align:middle}
+.tg .tg-wo29{border-color:#c0c0c0;text-align:left;vertical-align:top}
+
+.show {
+    display: none;
+}
+
+#comments{
+    cursor: pointer
+}
+</style>
+
+<script>
+$(document).ready(function(){
+    $('#comments').click(function(){
+        $('#comment-box').toggleClass('show');
+    })
+})
+</script>
+
+<div class="col-9 mx-auto">
+<div class="bg-white p-4 rounded">
+
+{% if object.report %}
+    <table class="tg">
+    <tr>
+        <th class="tg-ve35">Author</th>
+        <th class="tg-wo29">{{ object.author }}</th>
+    </tr>
+    <tr>
+        <td class="tg-wo29">Day</td>
+        <td class="tg-wo29">{{ object.report.day }}</td>
+    </tr>
+    <tr>
+        <td class="tg-wo29">Hour from</td>
+        <td class="tg-wo29">{{ object.report.start_hour }}</td>
+    </tr>
+    <tr>
+        <td class="tg-wo29">Hour to</td>
+        <td class="tg-wo29">{{ object.report.end_hour }}</td>
+    </tr>
+        <tr>
+        <td class="tg-wo29">Product / Production Line</td>
+        <td class="tg-wo29">{{ object.report.product }} / {{ object.report.production_line }}</td>
+    </tr>
+        <tr>
+        <td class="tg-wo29">Plan / Execution</td>
+        <td class="tg-wo29">{{ object.report.plan }} / {{ object.report.execution }}</td>
+    </tr>
+    </table>
+    <br>
+    <strong>{{ object.problem_reported.category }}</strong>
+    <br>
+    <small class="text-muted">{{object.problem_reported.problem_id }}</small>
+    <br>
+    Cost: {{object.problem_reported.breakdown }} min
+
+{% else %}
+    {% if object.image %}
+        <div class="mb-3"><Img class="w-100" src="{{object.image.url}}"></div>
+    {% endif %}
+    <h5>{{object.title}}</h5>
+    <p>{{object.description}}</p>
+{% endif %}
+
+<div class="row">
+    <div class="col-2 my-3">
+        <a href="{% url 'posts:post-list' %}">
+            <button class="btn btn-warning">
+            <i class="fas fa-arrow-left mr-2"></i> Back to board
+            </button>
+        </a>
+    </div>
+    {% if not object.report and object.author.user == request.user %}
+        <div class="col-2 my-3">
+            <a href="{% url 'posts:gp-delete' object.pk %}">
+                <button class="btn btn-danger h-100 ml-2">
+                    <i class="fas fa-times"></i>
+                </button>
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% if not object.report %}
+
+<h3>Share your thoughts</h3>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Add comment</button>
+</form>
+<div id="comments">All comments ({{object.comments.all.count}})</div>
+<br>
+<div id="comment-box" class='show'>
+{% if object.comments.all %}
+    {% for c in object.comments.all %}
+        <div class="card p-3 my-2">
+            <div class="row">
+                <div class='col-2'>
+                    <img src="{{ c.user.profile_picture.url }}" width="60" height="60" class="rounded-circle border">
+                </div>
+                <div class='col-8'>
+                    <div class = 'text muted small mb-1'> {{c.user}} | {{ c.created|timesince }} ago </div>
+                    <div>{{ c.body }}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+<h3>No comments yet</h3>
+{% endif %}
+</div>
+
+
+{% endif %}
+
+</div>
+</div>
+
+{% endblock content %}

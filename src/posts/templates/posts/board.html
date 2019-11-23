@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Board{% endblock title %}
+
+{% block content %}
+
+<div class="col-8 mx-auto">
+<div class="container bg-white pt-2 pb-4 rounded">
+    <form action="" method="POST" class="form-control" enctype="multipart/form-data" autocomplete="off">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+
+
+
+<br>
+{% for obj in object_list %}
+{% if obj.problem_reported %}
+    <div class="card card-body mt-3 border border-primary">
+    <small class="text-muted">author: {{ obj.problem_reported.user}} | {{obj.problem_reported.created|timesince}} ago </small>
+    <hr>
+    <h5 class="card-title">{{ obj.problem_reported.category}}</h5>
+    <p class="card-text">{{ obj.problem_reported.description}}</p>
+{% else %}
+    <div class="card card-body mt-3 border border-danger">
+    {% if obj.image %}
+        <div class="mb-3"><img class="w-100" src="{{ obj.image.url }}"></div>
+    {% endif %}
+    <small class="text-muted">author: {{ obj.author}} | {{obj.created|timesince}} ago </small>
+    <hr>
+    <h5 class="card-title">{{ obj.title}}</h5>
+    <p class="card-text">{{ obj.description}}</p>
+{% endif %}
+<form action="{% url 'posts:post-like' %}" method="POST">
+{% csrf_token %}
+<input type="hidden" name="post_id" value="{{ obj.id }}">
+<div class="row">
+<div class="col-4">
+<button class="btn btn-link" type="submit" style="text-decoration:none">
+
+{% if profile not in obj.liked.all %}
+<i class="far fa-thumbs-up"></i>
+<span class="ml-2">Like</span></button>
+{% else %}
+<i class="far fa-thumbs-down"></i>
+<span class="ml-2">Unlike</span></button>
+{% endif %}
+
+</button>
+<span>{{ obj.liked.all.count }} likes</span>
+</div>
+</form>
+<div class="col-3">
+<a href="{{ obj.get_absolute_url }}" class="btn btn-primary"><span class="ml-2"><i class="fas fa-search mr-2"></i>details</span></a>
+</div>
+</div>
+
+
+</div>
+{% endfor %}
+</div>
+{% endblock content %}

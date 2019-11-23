@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} home {% endblock title %}
+
+{% block content %}
+<div class="col-6 mx-auto p-5">
+    <div class="text-center text-white h1 mb-5">Welcome to Improveo</div>
+        {% if request.user.is_authenticated %}
+            <form action="" method="POST" class="form-control">
+                <div class="text-muted h5 mb-2">Select a production line to begin</div>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="hidden" name="prod_line" id="prod_line">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% else %}
+            <div class="text-white text-center h3">Login to begin</div>
+</div>
+
+{% endif %}
+
+<script>
+$('#div_id_production_line').on("change", function() {
+    const pl = $('#id_production_line option:selected').text()
+    console.log(pl)
+    $('#prod_line').val(pl) 
+});
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} view3 {% endblock title %}
+
+{% block content %}
+
+<h1>{{ user }}</h1>
+<br>
+<a href="{% url 'profiles:test-view' %}"><button class="btn btn-primary">Hello world</button></a>
+<a href="{% url 'profiles:test-view-1' %}"><button class="btn btn-primary">go to sleep</button></a>
+{% endblock content %}

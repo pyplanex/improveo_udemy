@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} report {% endblock title %}
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="problemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Report problems</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+            {{pform|crispy}}
+            <input type="hidden" name="report_id" id="report_id">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" name="submitbtn1" class="btn btn-primary">Send</button>
+        </div>
+       </form> 
+    </div>
+  </div>
+</div>
+
+<div class="container bg-white shadow-lg rounded py-2">
+    <div class="row">
+        <div class="col-2">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form|crispy}}
+                <button type="submit" name="submitbtn2" class="btn btn-primary w-100 shadow-sm mt-3"><i class="far fa-paper-plane pr-3"></i>Send</button>
+            </form>
+        </div>
+        <div class="col-10">
+            <div style="overflow-y:scroll; height:85vh" class="w-100 bg-light rounded border">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr class="text-center">
+                            <th scope="col">Day</th>
+                            <th scope="col">Start</th>
+                            <th scope="col">End</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Plan</th>
+                            <th scope="col">Execution</th>
+                            <th scope="col">Line</th>
+                            <th scope="col"></th>
+                            <th scope="col">Problems</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in object_list %}
+                            <tr class="text-center">
+                                <td>{{obj.get_day}}</td>
+                                <td>{{obj.start_hour}}</td>
+                                <td>{{obj.end_hour}}</td>
+                                <td>{{obj.product}}</td>
+                                <td>{{obj.plan}}</td>
+                                <td>{{obj.execution}}</td>
+                                <td>{{obj.production_line}}</td>
+                                <td>
+                                    {% if obj.problemreported_set.all %}
+                                        <div class="badge badge-danger">P</div>
+                                    {% endif %}
+                                </td>
+
+                                <td class="fit">
+                                    <button class="btn btn-warning open-modal" data-toggle="modal" data-target="#problemModal" data-url={{obj.id}}><i class="fas fa-exclamation-triangle"></i></button>
+                                </td>
+                                <td class="fit">
+                                    <a href="{{obj.get_absolute_url}}"><button class="btn btn-info"><i class="far fa-edit"></i></button></a>
+                                </td>
+                                <td class="fit">
+                                    <a href="{% url 'reports:delete-view' pk=obj.id %}"><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(".open-modal").on("click", function() {
+    const r_id = $(this).attr("data-url")
+    $("#report_id").val(r_id)
+    console.log(r_id)
+});
+
+</script>
+
+{% endblock content %}
+

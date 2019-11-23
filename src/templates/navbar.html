@@ -1,0 +1,53 @@
+{% url 'profiles:profile-view' as path_profiles %}
+{% url 'reports:home' as path_home %}
+{% url 'posts:post-list' as path_board %}
+{% url 'reports:select-view' as path_report %}
+
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary font-q fixed-top py-3">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path_home }}">Improveo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.path == path_home %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'reports:home' %}">Home</a>
+                </li>
+                <li class="nav-item {% if request.path == path_board %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'posts:post-list' %}">Board</a>
+                </li>
+                <li class="nav-item {% if request.path == path_report %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'reports:select-view' %}">Get report</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reports:pdf' %}">Todays PDF</a>
+                </li>        
+            </ul>
+
+            <ul class="navbar-nav">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item {% if request.path == path_profiles %}active{% endif %}">
+                        <a href="{% url 'profiles:profile-view' %}" class="nav-link">
+                            <img src="{{ picture.url }}" class="img-avatar" alt="profile picture">
+                            <span class="ml-2">{{request.user}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_logout' %}">
+                            <i class="fas fa-power-off mt-2"></i>
+                        </a>
+                    </li>
+                {% else %}
+                  <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">
+                            <i class="fa fa-sign-in-alt"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>

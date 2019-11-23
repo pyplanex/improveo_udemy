@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load pic_name %}
+{% load crispy_forms_tags %}
+{% block title %} profile {% endblock title %}
+
+{% block content %}
+
+<div class="col-9 mx-auto">
+<div class="card p-4">
+
+<div class="h4">Edit Profile</div>
+
+    <div class="img-thumbnail mx-auto">
+        <img src="" width="200" height="200">  
+    </div>
+    <div><span class="font-weight-bold">Username: </span></div>
+    <div><span class="font-weight-bold">Email: </span></div>
+    <div><span class="font-weight-bold">Bio: </span> </div>
+    <div><span class="font-weight-bold">Website: </span></div>
+    <div><span class="font-weight-bold">Joined: </span></div>
+    <br>
+    <div>
+        <span class="font-weight-bold">Current picture: </span>
+    </div>
+  
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#exampleModal">
+  Update profile
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+      </div>
+      <div class="modal-footer">
+       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" type="submit">Save changes</button>
+        </form> 
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>    
+</div>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}update{% endblock title %}
+
+{% block content %}
+
+<div class="col-9 mx-auto">
+    <div class="card p-4">
+        <div class="text-muted mb-2 h4"> Production Line: {{ object.production_line }} </div>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
